@@ -4,14 +4,47 @@ import Ducks from "./Ducks";
 import Login from "./Login";
 import MyProfile from "./MyProfile";
 import Register from "./Register";
+import ProtectedRoute from "./ProtectedRoute";
 import "./styles/App.css";
 
 function App() {
-  const [isLoggedIn, setIsLoggedin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleRegistration = ({
+    username,
+    email,
+    password,
+    confirmPassword,
+  }) => {
+    if (password === confirmPassword) {
+      auth
+        .register(username, password, email)
+        .then(() => {
+          setIsLoggedIn(true);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
   return (
     <Routes>
-      <Route path="/ducks" element={<Ducks />} />
-      <Route path="/my-profile" element={<MyProfile />} />
+      <Route
+        path="/ducks"
+        element={
+          <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <Ducks />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-profile"
+        element={
+          <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <MyProfile />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/login"
         element={
@@ -24,7 +57,7 @@ function App() {
         path="/register"
         element={
           <div className="registerContainer">
-            <Register />
+            <Register handleRegistration={handleRegistration} />
           </div>
         }
       />
