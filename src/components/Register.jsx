@@ -19,7 +19,7 @@ const Register = ({ handleRegistration }) => {
     }));
   };
 
-  const onRegistration = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     handleRegistration(data);
   };
@@ -28,7 +28,7 @@ const Register = ({ handleRegistration }) => {
     <div className="register">
       <Logo title={"CryptoDucks"} />
       <p className="register__welcome">Please register.</p>
-      <form className="register__form" onSubmit={onRegistration}>
+      <form className="register__form" onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
           id="username"
