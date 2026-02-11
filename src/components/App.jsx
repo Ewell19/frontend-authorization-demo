@@ -5,6 +5,7 @@ import Login from "./Login";
 import MyProfile from "./MyProfile";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
+import * as auth from "../utils.auth";
 import "./styles/App.css";
 
 function App() {
