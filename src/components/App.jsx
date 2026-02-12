@@ -11,15 +11,15 @@ import Login from "./Login";
 import MyProfile from "./MyProfile";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
-import * as auth from "../utils.auth";
+import * as auth from "../utils/auth";
 import { getToken, setToken } from "../utils/token";
-import * as api from "../utils.api";
+import * as api from "../utils/api";
 import { AppContext } from "../context/appContext";
 import "./styles/App.css";
 
 function App() {
   const [userData, setUserData] = useState({ username: "", email: "" });
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -29,16 +29,19 @@ function App() {
     password,
     confirmPassword,
   }) => {
-    if (password === confirmPassword) {
-      auth
-        .register(username, password, email)
-        .then(() => {
-          navigate("/login");
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
     }
+    auth
+      .register(username, password, email)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Registration failed: " + err);
+      });
   };
 
   const handleLogin = ({ username, password }) => {
@@ -53,11 +56,11 @@ function App() {
           setUserData(data.user);
           setIsLoggedIn(true);
           navigate(location.state?.from.pathname || "/ducks");
-          navigate(redirectpath);
         }
       })
       .catch((err) => {
         console.error(err);
+        alert("Login failed: " + err);
       });
   };
 
@@ -113,7 +116,7 @@ function App() {
         <Route
           path="/register"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn} anonymous>
+            <ProtectedRoute anonymous>
               <div className="registerContainer">
                 <Register handleRegistration={handleRegistration} />
               </div>
